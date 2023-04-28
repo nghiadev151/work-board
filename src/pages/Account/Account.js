@@ -4,6 +4,7 @@ import classNames from "classnames/bind";
 import {useState} from "react";
 
 import {FaFacebook, FaGoogle} from "react-icons/fa";
+import Login from "~/pages/Account/Login";
 
 const cx = classNames.bind(styles);
 
@@ -29,18 +30,7 @@ function Account() {
                     </form>
                 </div>
                 <div className={cx("formContainer", "signInContainer")}>
-                    <form action="#">
-                        <h1>Sign in</h1>
-                        <div className={cx("socialContainer")}>
-                            <a href="#" className={cx("fbIcons")}><FaFacebook/></a>
-                            <a href="#" className={cx("ggIcons")}><FaGoogle/></a>
-                        </div>
-                        <span>or use your account</span>
-                        <input autoFocus={true} type="text" placeholder="Username"/>
-                        <input type="password" placeholder="Password"/>
-                        <a href="#" className={cx("hoverTextRed")}>Forgot your password?</a>
-                        <button className={cx("hover")}>Sign In</button>
-                    </form>
+                    <Login/>
                 </div>
                 <div className={cx("overlayContainer")}>
                     <div className={cx("overlay")}>
