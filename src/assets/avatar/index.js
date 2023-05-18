@@ -1,0 +1,1 @@
+export {default as Avatar} from "~/assets/avatar/avatar.png"
