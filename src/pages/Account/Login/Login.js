@@ -6,6 +6,7 @@ import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 
 import AuthServices from "~/services/authServices";
+import {toast} from "react-toastify";
 
 const cx = classNames.bind(styles);
 
@@ -24,11 +25,19 @@ function Login() {
 
     const handleSubmit = async () => {
         try {
-            const response = await AuthServices.login(email, password)
+            await AuthServices.login(email, password)
             navigate("/")
-            console.log(response)
         } catch (error) {
+            toast.warning('Đăng nhập thất bại! Vui lòng thử lại', {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+            });
             console.log(error)
+            setPassword("")
         }
     }
 
