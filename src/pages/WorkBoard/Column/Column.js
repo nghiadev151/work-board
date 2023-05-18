@@ -129,7 +129,7 @@ function Column(props) {
             >
                 {data.cards?.map((card, index) => (
                     <Draggable key={index}>
-                        <Card loading={setIsLoading} card={card}/>
+                        <Card loading={setIsLoading} card={card} columnId={data?.id}/>
                     </Draggable>
                 ))}
                 {

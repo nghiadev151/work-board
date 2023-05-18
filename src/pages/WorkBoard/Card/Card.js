@@ -13,7 +13,7 @@ import {AiFillEdit, AiOutlineUserAdd} from 'react-icons/ai'
 
 import styles from "./Card.module.scss";
 import Form from "react-bootstrap/Form";
-import {addMemberToCard, searchUserByEmail} from "~/services/workspaces.sevices";
+import {addMemberToCard, searchUserByEmail, updateCardTitle} from "~/services/workspaces.sevices";
 import {toast} from "react-toastify";
 import {data} from "autoprefixer";
 import UserItem from "~/pages/WorkBoard/Card/UserItem";
@@ -22,14 +22,61 @@ import UserItem from "~/pages/WorkBoard/Card/UserItem";
 const cx = classNames.bind(styles);
 
 function Card(props) {
-    const {card, loading} = props
+    const {card, loading, columnId} = props
     const [tooltipIndex, setTooltipIndex] = useState(-1);
     const [show, setShow] = useState(false);
     const [open, setOpen] = useState(false)
+    const [newColumnId, SetNewColumnId] = useState(null)
     const [email, setEmail] = useState('')
     const [cardId, setCardId] = useState(null)
     const [users, setUsers] = useState([])
     const [haveData, setHaveData] = useState(false)
+    const [title, setTitle] = useState('')
+
+
+    const handleChangeTitle = (e) => {
+        setTitle(e.target.value)
+    }
+    const handleUpdateTitle = async (e) => {
+        e.preventDefault();
+        if (!title) {
+            toast.warning('Title không được để trống!', {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+            });
+            setOpen(true)
+        } else {
+            const body = {
+                columnId: columnId,
+                name: title,
+            }
+            console.log(body)
+            console.log(card.id)
+            const response = await updateCardTitle(card.id, body);
+            if (response.status === 200) {
+                toast.success('Title không được để trống!', {
+                    position: "top-right",
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                });
+                loading(true)
+                setOpen(false)
+            } else {
+                loading(false)
+            }
+
+
+        }
+
+
+    }
 
     useEffect(() => {
         let timeout
@@ -65,6 +112,7 @@ function Card(props) {
     }
     const handleChangeOpen = () => {
         setOpen(true)
+        SetNewColumnId(columnId)
     }
 
     const handleMemberTooltip = (index) => {
@@ -133,14 +181,15 @@ function Card(props) {
                                         <div className={cx('description')}>
                                             <div style={{fontWeight: 'bold'}}>Mô tả</div>
                                             <div className={cx('input')}>
-                                                <input placeholder={'Thêm mô tả chi tiết'}/>
+                                                <input value={title} onChange={handleChangeTitle}
+                                                       placeholder={'Thêm mô tả chi tiết'}/>
                                             </div>
 
                                         </div>
                                         <div className={cx('modal-save')}>
-                                            <Button variant="primary" size="lg">
+                                            <Button variant="primary" size="lg" onClick={handleUpdateTitle}>
                                                 Cập Nhật
-                                            </Button>{' '}
+                                            </Button>
                                         </div>
                                     </div>
                                     <div className={cx('modal-right')}>

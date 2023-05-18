@@ -36,5 +36,9 @@ export const addMemberToCard = async (cardId, email) => {
 export const searchUserByEmail = async (email) => {
     return await instance.get(`/user/search/${email}`);
 }
+export const updateCardTitle = async (id, body) => {
+    return await instance.put(`/cards/${id}`, body);
+}
+
 
 
