@@ -62,7 +62,7 @@ function Card(props) {
             console.log(card.id)
             const response = await updateCardTitle(card.id, body);
             if (response.status === 200) {
-                toast.success('Title không được để trống!', {
+                toast.success('Updated Thành công!', {
                     position: "top-right",
                     autoClose: 2000,
                     hideProgressBar: false,
