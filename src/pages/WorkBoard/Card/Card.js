@@ -31,16 +31,19 @@ function Card(props) {
     const [cardId, setCardId] = useState(null)
     const [users, setUsers] = useState([])
     const [haveData, setHaveData] = useState(false)
-    const [title, setTitle] = useState('')
-
+    const [name, setName] = useState(card.name)
+    const [description, setDescription] = useState(card.description)
 
     const handleChangeTitle = (e) => {
-        setTitle(e.target.value)
+        setName(e.target.value)
+    }
+    const handleChangeDescription = (e) => {
+        setDescription(e.target.value)
     }
     const handleUpdateTitle = async (e) => {
         e.preventDefault();
-        if (!title) {
-            toast.warning('Title không được để trống!', {
+        if (!name || !description) {
+            toast.warning('Tên hoặc mô tả không được để trống!', {
                 position: "top-right",
                 autoClose: 2000,
                 hideProgressBar: false,
@@ -52,7 +55,8 @@ function Card(props) {
         } else {
             const body = {
                 columnId: columnId,
-                name: title,
+                name: name,
+                description: description,
             }
             console.log(body)
             console.log(card.id)
@@ -173,16 +177,17 @@ function Card(props) {
                     render={attrs => (
                         <div className={cx('box')} tabIndex="-1" {...attrs}>
                             <div className={cx('function')}>
-                                <div>
-                                    title
-                                </div>
                                 <div className={cx('modal')}>
                                     <div className={cx('modal-left')}>
                                         <div className={cx('description')}>
-                                            <div style={{fontWeight: 'bold'}}>Mô tả</div>
+                                            <div style={{fontWeight: 'bold'}}>Mô tả:{card.description}</div>
                                             <div className={cx('input')}>
-                                                <input value={title} onChange={handleChangeTitle}
-                                                       placeholder={'Thêm mô tả chi tiết'}/>
+                                                <input value={name} onChange={handleChangeTitle}
+                                                       placeholder={'Tên card'}/>
+                                            </div>
+                                            <div className={cx('input')}>
+                                                <input value={description} onChange={handleChangeDescription}
+                                                       placeholder={'Mô tả'}/>
                                             </div>
 
                                         </div>
