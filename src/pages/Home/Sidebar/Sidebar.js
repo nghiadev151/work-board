@@ -59,6 +59,7 @@ function Sidebar(props) {
   }, [isActive, isRotated]);
   useEffect(() => {
     const us = JSON.parse(localStorage.getItem("user"));
+    if(us === undefined || us === null) return;
     getAllWorkspacesByUserId(us.id).then((res) => 
     setWorkspaces(res.data));
   }, []);
