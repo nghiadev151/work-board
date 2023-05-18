@@ -33,6 +33,11 @@ export const addMemberToCard = async (cardId, email) => {
 
 };
 
+export const addMemberToWorkSpace = async (wSpaceId, email) => {
+    return await instance.post(`/workspace/${wSpaceId}/member/${email}`);
+
+};
+
 export const searchUserByEmail = async (email) => {
     return await instance.get(`/user/search/${email}`);
 }
