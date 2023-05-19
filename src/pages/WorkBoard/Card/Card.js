@@ -12,7 +12,12 @@ import {AiFillEdit, AiOutlineUserAdd} from 'react-icons/ai'
 
 import styles from "./Card.module.scss";
 import Form from "react-bootstrap/Form";
-import {addMemberToCard, searchUserByEmail, updateCardTitle} from "~/services/workspaces.sevices";
+import {
+    addMemberToCard,
+    searchUserByEmail,
+    searchUserInWorkSpace,
+    updateCardTitle
+} from "~/services/workspaces.sevices";
 import {toast} from "react-toastify";
 import UserItem from "~/pages/WorkBoard/Card/UserItem";
 import {Avatar} from "~/assets/avatar";
@@ -21,7 +26,7 @@ import {Avatar} from "~/assets/avatar";
 const cx = classNames.bind(styles);
 
 function Card(props) {
-    const {card, loading, columnId} = props
+    const {card, loading, columnId, workspaceId} = props
     const [tooltipIndex, setTooltipIndex] = useState(-1);
     const [show, setShow] = useState(false);
     const [open, setOpen] = useState(false)
@@ -83,7 +88,7 @@ function Card(props) {
         let timeout
         const fetchData = async () => {
             timeout = setTimeout(async () => {
-                const response = await searchUserByEmail(email)
+                const response = await searchUserInWorkSpace(workspaceId, email)
                 if (response?.data)
                     setUsers(response.data)
             }, 300)
