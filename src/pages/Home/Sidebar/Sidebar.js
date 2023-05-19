@@ -9,10 +9,21 @@ import {
   FaRegSun,
   FaAngleDown,
 } from "react-icons/fa";
+import Modal from "react-bootstrap/modal";
+import Form from "react-bootstrap/Form";
+import { Button } from "react-bootstrap";
+import { toast } from "react-toastify";
 import { AiOutlineHome } from "react-icons/ai";
 import styles from "./Sidebar.module.scss";
 import { Link } from "react-router-dom";
-import {getAllWorkspacesByUserId } from "~/services/workspaces.sevices";
+import {
+  addMemberToWorkSpace,
+  getAllMemberWorkspace,
+  getAllWorkspacesByUserId,
+  searchUserByEmail,
+} from "~/services/workspaces.sevices";
+import UserItem from "~/pages/WorkBoard/Card/UserItem";
+import Avatar from "~/assets/avatar/avatar.jpg";
 
 const cx = classNames.bind(styles);
 
@@ -23,7 +34,11 @@ function Sidebar(props) {
   const [activeId, setActiveId] = useState("s1");
   const [activeWp, setActiveWp] = useState("");
   const [workspaces, setWorkspaces] = useState();
-
+  const [show, setShow] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [email, setEmail] = useState("");
+  const [users, setUsers] = useState([]);
+  const [usersE, setUsersE] = useState([]);
   const collapse = [
     { name: "Bảng", icon: FaTrello },
     { name: "Điểm nổi bật", icon: FaHeart },
@@ -54,16 +69,82 @@ function Sidebar(props) {
       setActiveWp(id);
     }
   };
+  const handleChangeEmail = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handleClose = () => setShow(false);
+  const handleShow = (wSpaceId) => {
+    setShow(true);
+    setOpen(false);
+    const fetchData = async () => {
+      const response = await getAllMemberWorkspace(wSpaceId);
+      if (response?.data) {
+        setUsersE(response.data);
+      }
+    };
+    fetchData();
+  };
+  const handleChangeOpen = () => {
+    setOpen(true);
+  };
+  const handleAddMember = async (email) => {
+    let wSpaceId;
+    workspaces?.forEach((element) => {
+      wSpaceId = element.id;
+    });
+    console.log(wSpaceId);
+    const response = await addMemberToWorkSpace(wSpaceId, email).catch(
+      (error) => {
+        console.log(response);
+        if (error.response.status === 404) {
+          toast.warning("Không có thành viên này!", {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
+        }
+      }
+    );
+    if (response.status === 200) {
+      toast.success("Thêm thành viên  thành công!", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+
+      setShow(false);
+    }
+  };
   useEffect(() => {
     setRotate(isActive === null ? 0 : isRotated ? 180 : 0);
   }, [isActive, isRotated]);
   useEffect(() => {
     const us = JSON.parse(localStorage.getItem("user"));
-    if(us === undefined || us === null) return;
-    getAllWorkspacesByUserId(us.id).then((res) => 
-    setWorkspaces(res.data));
+    if (us === undefined || us === null) return;
+    getAllWorkspacesByUserId(us.id).then((res) => setWorkspaces(res.data));
   }, []);
-  
+  useEffect(() => {
+    let timeout;
+    const fetchData = async () => {
+      timeout = setTimeout(async () => {
+        const response = await searchUserByEmail(email);
+        if (response?.data) setUsers(response.data);
+      }, 300);
+    };
+    if (email === "") {
+      setUsers([]);
+      return;
+    }
+    fetchData();
+  }, [email]);
+
   return (
     <div className={cx("wrapper")}>
       <div className={cx("sidebar")}>
@@ -104,13 +185,12 @@ function Sidebar(props) {
             <Link to="/create-workspace">
               <span>
                 <FaPlus className={cx("icon-plus")} />
-</span>
+              </span>
             </Link>
           </div>
           <div className={cx("sidebar-bottom-content")}>
             <ul>
               {workspaces?.map((item, ind) => {
-                
                 return (
                   <div key={item.id}>
                     <li
@@ -128,7 +208,7 @@ function Sidebar(props) {
                     >
                       <div className="d-flex justify-content-start align-items-center">
                         <span className={cx("workspaces-icon")}>
-                          {item.icon}
+                          {item.name.charAt(0).toUpperCase()}
                         </span>
                         <p className="mb-0">{item.name}</p>
                       </div>
@@ -152,7 +232,27 @@ function Sidebar(props) {
                     >
                       <ul className="mt-3">
                         {collapse.map((coll, index) => {
-                          return coll.name !== "Thành viên" ? (
+                          if (coll.name === "Bảng") {
+                            return (
+                              <Link to={`/work-board/${item.id}`}>
+                              <li
+                                key={index}
+                                className={cx("sidebar-item", {
+                                  active: activeWp === `w${item.id}${index}`,
+                                })}
+                                onClick={() => handleActiveWp(`w${item.id}${index}`)}
+                              >
+                               
+                                  <span className={cx("collapse-content-icon")}>
+                                    {React.createElement(coll.icon)}
+                                  </span>
+                                  <p>{coll.name}</p>
+                               
+                              </li>
+                              </Link>
+                            );
+                          } else
+                          return coll.name !== "Thành viên" && coll.name !=="Bảng" ? (
                             <li
                               key={index}
                               className={cx("sidebar-item", {
@@ -177,23 +277,98 @@ function Sidebar(props) {
                               onClick={() =>
                                 handleActiveWp(`w${item.id}${index}`)
                               }
->
-                              <div className="d-flex justify-content-start align-items-center">
-                                <span className={cx("icon-false")}>
-                                  {React.createElement(coll.icon)}
-                                </span>
-                                <p className={cx("content-false")}>
-                                  {coll.name}
-                                </p>
-                              </div>
-                              <Link to="/work-board">
+                            >
+                              {" "}
+                              <div
+                                className="w-100 d-flex justify-content-between align-items-center"
+                                onClick={() => {
+                                  handleShow(item.id);
+                                }}
+                              >
+                                <div className="d-flex justify-content-start align-items-center">
+                                  <span className={cx("icon-false")}>
+                                    {React.createElement(coll.icon)}
+                                  </span>
+                                  <p className={cx("content-false")}>
+                                    {coll.name}
+                                  </p>
+                                </div>
+
                                 <span>
                                   <FaPlus className={cx("icon-plus-false")} />
                                 </span>
-                              </Link>
+                              </div>
                             </li>
                           );
                         })}
+                        <Modal
+                          size="lg"
+                          centered={true}
+                          autoFocus={true}
+                          show={show}
+                          onHide={handleClose}
+                        >
+                          <Modal.Header closeButton>
+                            <Modal.Title className={cx("title")}>
+                              Thêm thành viên
+                            </Modal.Title>
+                          </Modal.Header>
+                          <Modal.Body>
+                            <Form.Control
+                              size="lg"
+                              value={email}
+                              onChange={handleChangeEmail}
+                              className={cx("input-add")}
+                              placeholder="Nhập email user"
+                            />
+
+                            {
+                              // haveData
+                              // &&
+                              <>
+                                <div>
+                                  {users.map((result, index) => (
+                                    <UserItem
+                                      key={index}
+                                      data={result}
+                                      handleAddMember={handleAddMember}
+                                    />
+                                  ))}
+                                </div>
+                                <div className="mt-3">
+                                  <h3>
+                                    Các thành viên đã có trong không gian làm
+                                    việc
+                                  </h3>
+                                  {usersE.map((result, index) => (
+                                    <>
+                                      <div style={{backgroundColor: '#DADADA', marginBottom: '5px', borderRadius: '5px', padding: '5px', display: 'flex', alignItems: 'center'}}>
+                                        <div  className="d-flex align-items-center">
+                                          <img style={{borderRadius: '50%', width: '25px', height:  '25px'}} src={Avatar} />
+                                        </div>
+                                        <div style={{marginLeft: '5px'}}>
+                                          <div style={{fontWeight: 'bold'}}>
+                                            {result.firstName} {result.lastName}
+                                          </div>
+                                          {result.email}
+                                        </div>
+                                      </div>
+                                    </>
+                                  ))}
+                                </div>
+                              </>
+                            }
+                          </Modal.Body>
+                          <Modal.Footer>
+                            <Button
+                              variant="secondary"
+                              size="lg"
+                              onClick={handleClose}
+                            >
+                              Hủy
+                            </Button>
+                          </Modal.Footer>
+                        </Modal>
                       </ul>
                     </div>
                   </div>
