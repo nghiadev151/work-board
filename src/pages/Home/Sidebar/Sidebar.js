@@ -23,7 +23,7 @@ import {
   searchUserByEmail,
 } from "~/services/workspaces.sevices";
 import UserItem from "~/pages/WorkBoard/Card/UserItem";
-import Avatar from "~/assets/avatar/avatar.jpg";
+import {Avatar} from "~/assets/avatar";
 
 const cx = classNames.bind(styles);
 
@@ -234,20 +234,19 @@ function Sidebar(props) {
                         {collapse.map((coll, index) => {
                           if (coll.name === "Bảng") {
                             return (
-                              <Link to={`/work-board/${item.id}`}>
+                              <Link key={index} to={`/work-board/${item.id}`}>
                               <li
-                                key={index}
                                 className={cx("sidebar-item", {
                                   active: activeWp === `w${item.id}${index}`,
                                 })}
                                 onClick={() => handleActiveWp(`w${item.id}${index}`)}
                               >
-                               
+
                                   <span className={cx("collapse-content-icon")}>
                                     {React.createElement(coll.icon)}
                                   </span>
                                   <p>{coll.name}</p>
-                               
+
                               </li>
                               </Link>
                             );
@@ -341,7 +340,7 @@ function Sidebar(props) {
                                     việc
                                   </h3>
                                   {usersE.map((result, index) => (
-                                    <>
+                                    <React.Fragment key={index}>
                                       <div style={{backgroundColor: '#DADADA', marginBottom: '5px', borderRadius: '5px', padding: '5px', display: 'flex', alignItems: 'center'}}>
                                         <div  className="d-flex align-items-center">
                                           <img style={{borderRadius: '50%', width: '25px', height:  '25px'}} src={Avatar} />
@@ -353,7 +352,7 @@ function Sidebar(props) {
                                           {result.email}
                                         </div>
                                       </div>
-                                    </>
+                                    </React.Fragment>
                                   ))}
                                 </div>
                               </>

@@ -139,7 +139,6 @@ function Column(props) {
                         id="dropdown-menu-align-end"
                         title="">
                         <DropdownItem onClick={handleDeleteColumn}>Xóa cột</DropdownItem>
-                        <DropdownItem>Sửa title column</DropdownItem>
                     </DropdownButton>
                 </div>
             </header>

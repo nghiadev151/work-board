@@ -7,7 +7,6 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import Tippy from '@tippyjs/react/headless';
 
-import avatar from '~/assets/avatar/avatar.jpg'
 import {AiFillEdit, AiOutlineUserAdd} from 'react-icons/ai'
 
 
@@ -15,8 +14,8 @@ import styles from "./Card.module.scss";
 import Form from "react-bootstrap/Form";
 import {addMemberToCard, searchUserByEmail, updateCardTitle} from "~/services/workspaces.sevices";
 import {toast} from "react-toastify";
-import {data} from "autoprefixer";
 import UserItem from "~/pages/WorkBoard/Card/UserItem";
+import {Avatar} from "~/assets/avatar";
 
 
 const cx = classNames.bind(styles);
@@ -223,7 +222,7 @@ function Card(props) {
                     >
                         <Image
                             className={cx('avatar')}
-                            src={avatar}
+                            src={Avatar}
                             roundedCircle
                         />
                     </OverlayTrigger>
