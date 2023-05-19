@@ -1,8 +1,8 @@
 const routes = {
     home: "/home",
     account: "/account",
-    workBoard:'/work-board',
-    createWorkspace:'/create-workspace'
+    workBoard:"/work-board/:id",
+    createWorkspace:"/create-workspace",
 
 
 };

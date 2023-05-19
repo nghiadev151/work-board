@@ -11,12 +11,33 @@
     box-shadow: 0 1px 3.125rem 0 rgba(0,0,0,.2);
 
 }
+.header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.editable{
+    font-size: 1.6rem;
+    border: none;
+}
 .input{
     padding: 8px 4px;
 }
 .input-add {
     font-size: 1.6rem;
     padding: 0 12px;
+}
+.create-card{
+    display: flex;
+    align-items: center;
+    padding: 4px;
+    cursor: pointer;
+
+    &:hover{
+        margin: 0 4px;
+        background-color: #92B9E3;
+        color: var(--while-color);
+    }
 }
 .function{
     padding: 12px;
@@ -29,5 +50,9 @@
     &:hover{
         opacity: 0.7;
     }
+}
+.error{
+    padding: 4px;
+    color: #FF0033;
 }
 

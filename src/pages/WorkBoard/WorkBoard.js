@@ -4,6 +4,7 @@ import {Container, Draggable} from "react-smooth-dnd";
 import {Button, Col, Container as Wrapper, Row} from 'react-bootstrap'
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
+import {useParams} from "react-router-dom";
 
 
 import styles from './WorkBoard.module.scss'
@@ -12,33 +13,41 @@ import Column from "~/pages/WorkBoard/Column";
 import {applyDrag, generateItems} from "~/untils/DragDrop";
 import {AiOutlinePlus} from 'react-icons/ai'
 import {RiDeleteBack2Fill} from 'react-icons/ri'
-import {createColumn, getAllMemberWorkspace, getWorkspaceById} from "~/services/workspaces.sevices";
+import {createColumn, getAllMemberWorkspace, getWorkspaceById, moveCardToColumn} from "~/services/workspaces.sevices";
 
 const cx = classNames.bind(styles);
 
 function WorkBoard(props) {
+    let {id} = useParams();
     const [isOpen, setIsOpen] = useState(false)
     const [columns, setColumns] = useState([])
     const [columnTitle, setColumnTitle] = useState('')
     const [isLoading, setIsLoading] = useState(false)
+    const [newColumnId, setNewColumnId] = useState(null)
+    const [currentColumnId, setCurrentColumnId] = useState(null)
+    const [card, setCard] = useState(null)
     const handleChangeOpen = () => {
         setIsOpen(true)
     }
     const handleChangeColumnTitle = (e) => {
         setColumnTitle(e.target.value)
     }
+
     useEffect(() => {
         setIsLoading(false)
+
         async function fetchData() {
-            const response = await getWorkspaceById(1);
+            const response = await getWorkspaceById(id);
             const data = response?.data;
             setColumns(data.columns)
         }
+
         fetchData();
     }, [isLoading]);
+
     const handleAddColumns = async () => {
         const body = {
-            workspaceId: 1,
+            workspaceId: id,
             columnName: columnTitle
         }
         const response = await createColumn(body)
@@ -50,30 +59,40 @@ function WorkBoard(props) {
         }
     }
 
-
     function getCardPayload(columnId, index) {
-        return columns.columns.filter(p => p.id === columnId)[0].children[index];
+        const column = columns.find(column => column.id === columnId);
+        const card = column.cards[index];
+        return {
+            cardId: card.id,
+            columnId: columnId,
+            cardIndex: index,
+        };
     }
 
     function onColumnDrop(dropResult) {
-        const newScene = Object.assign({}, columns);
-        newScene.columns = applyDrag(newScene.columns, dropResult);
-        setColumns(newScene);
+        const newColumns = applyDrag([...columns], dropResult);
+        setColumns(newColumns);
     }
 
-    function onCardDrop(columnId, dropResult) {
-        if (dropResult.removedIndex !== null || dropResult.addedIndex !== null) {
-            const newScene = Object.assign({}, columns);
-            const column = newScene.columns.filter(p => p.id === columnId)[0];
-            const columnIndex = newScene.columns.indexOf(column);
 
-            const newColumn = Object.assign({}, column);
-            newColumn.children = applyDrag(newColumn.children, dropResult);
-            newScene.columns.splice(columnIndex, 1, newColumn);
+    const onCardDrop = async (columnId, dropResult) => {
+        // console.log("card", card.cardId)
+        // console.log("newColumnId", newColumnId)
+        if (card !== null) {
+            const response = await moveCardToColumn(card.cardId, newColumnId)
+            if (response.status === 200) {
+                setIsLoading(true)
+                setIsOpen(false)
+                setCard(null)
+                setNewColumnId(null)
+            } else {
+                setIsLoading(false)
+            }
 
-            setColumns(newScene);
         }
+
     }
+
 
     return (
 
@@ -89,9 +108,16 @@ function WorkBoard(props) {
                         className: 'cards-drop-preview'
                     }}
                 >
-                    {columns?.map(column => (
-                        <Draggable key={column.id}>
-                            <Column data={column} onCardDrop={onCardDrop} getCardPayload={getCardPayload}/>
+                    {columns?.map((column, index) => (
+                        <Draggable key={index}>
+                            <Column setNewColumnId={setNewColumnId}
+                                    setCurrentColumnId={setCurrentColumnId}
+                                    setIsLoading={setIsLoading}
+                                    setCard={setCard}
+                                    workspaceId={id}
+                                    data={column}
+                                    onCardDrop={onCardDrop}
+                                    getCardPayload={getCardPayload}/>
                         </Draggable>
                     ))}
                     {

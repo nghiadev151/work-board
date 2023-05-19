@@ -1,0 +1,138 @@
+.card-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  p {
+    margin-bottom: 0;
+  }
+
+  .box-edit {
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 999px;
+
+    &:hover {
+      background-color: #ccc;
+
+    }
+  }
+
+
+}
+
+
+.edit {
+  font-size: 2rem;
+}
+
+.avatar {
+  width: 25px;
+  height: 25px;
+}
+
+.edit-dropdown {
+  z-index: 1;
+}
+
+.box {
+  position: fixed;
+  width: 800px;
+  height: 500px;
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  transform: translateX(-36%) translateY(-30%);
+}
+
+.function {
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: column;
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.modal {
+  display: flex;
+
+  .modal-left {
+    width: 70%;
+    padding-left: 30px;
+    padding-right: 30px;
+
+    .input{
+      margin-top: 5px;
+      width: 100%;
+      background-color: #e4e6ea;
+      border-radius: 5px;
+
+      input{
+        border: none;
+        outline: none;
+        background-color: transparent;
+        text-indent: 15px;
+        line-height: 300%;
+        width: 95%;
+      }
+    }
+
+    .modal-save{
+      text-align: center;
+      margin-top: 20px;
+
+      button{
+        &:hover{
+          cursor: pointer;
+        }
+      }
+    }
+  }
+
+  .modal-right {
+    width: 30%;
+  }
+}
+
+.add-to-card-title {
+  font-weight: bold;
+}
+
+.add-user {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  background-color: #e4e6ea;
+  border-radius: 5px;
+  width: 90%;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  .add-user-icon {
+    font-size: 140%;
+    margin-right: 10px;
+    margin-left: 10px;
+  }
+}
+
+.item {
+  padding: 4px 8px;
+  color: var(--text-color);
+  font-size: 1.6rem;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #ccc;
+    color: var(--text-color);
+  }
+}
+
+.input-add {
+  font-size: 1.6rem;
+}
+
+.title {
+  font-size: 2rem;
+}

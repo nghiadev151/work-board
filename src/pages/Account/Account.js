@@ -5,6 +5,7 @@ import {useState} from "react";
 
 import {FaFacebook, FaGoogle} from "react-icons/fa";
 import Login from "~/pages/Account/Login";
+import Register from "~/pages/Account/Register/Register";
 
 const cx = classNames.bind(styles);
 
@@ -16,18 +17,7 @@ function Account() {
                 "rightPanelActive": active
             })}>
                 <div className={cx("formContainer", "signUpContainer")}>
-                    <form action="#">
-                        <h1>Create Account</h1>
-                        <div className={cx("socialContainer")}>
-                            <a href="#" className={cx("fbIcons")}><FaFacebook/></a>
-                            <a href="#" className={cx("ggIcons")}><FaGoogle/></a>
-                        </div>
-                        <span>or use your email for registration</span>
-                        <input type="text" placeholder="Username"/>
-                        <input type="password" placeholder="Password"/>
-                        <input type="password" placeholder="Confirm Password"/>
-                        <button className={cx("hover")}>Sign Up</button>
-                    </form>
+                    <Register/>
                 </div>
                 <div className={cx("formContainer", "signInContainer")}>
                     <Login/>

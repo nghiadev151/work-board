@@ -6,6 +6,7 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import {Button, Dropdown, DropdownButton, Image} from "react-bootstrap";
 import classNames from "classnames/bind";
 import {Link} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 import styles from "./Header.module.scss";
 import hinh7mau from "~/assets/header/hinh7mau.jpg";
@@ -16,26 +17,38 @@ import config from "~/config";
 
 import AuthServices from "~/services/authServices";
 import {useEffect, useState} from "react";
+import {getAllWorkspacesByUserId} from "~/services/workspaces.sevices";
 
 const cx = classNames.bind(styles);
 
 function NavScrollExample() {
-    const [logged, setLogged] = useState(false)
-    const [lastname, setLastname] = useState("")
+    const [logged, setLogged] = useState(false);
+    const [lastname, setLastname] = useState("");
+    const navigate = useNavigate()
 
     useEffect(() => {
         if (localStorage.getItem("user") !== null) {
-            setLogged(true)
-            setLastname(JSON.parse(localStorage.getItem("user")).lastName)
+            setLogged(true);
+            setLastname(JSON.parse(localStorage.getItem("user")).lastName);
         }
-    }, [])
+    }, []);
+    const [workspaces, setWorkspaces] = useState([]);
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem("user"));
+        getAllWorkspacesByUserId(user?.id).then((res) => setWorkspaces(res.data));
+    }, []);
+
+
+    const handleLogout = () => {
+        AuthServices.logout();
+        navigate("/account")
+        setLogged(false);
+    };
 
     return (
         <Navbar className={cx("wrapper")} bg="light" expand="lg">
             <Container>
-                <Navbar.Brand
-                    href="/"
-                >
+                <Navbar.Brand>
                     <Link to={config.routes.home}>
                         <img
                             src={logo}
@@ -71,7 +84,7 @@ function NavScrollExample() {
                     Các Không gian làm việc của bạn
                   </span>
                                 </NavDropdown.Item>
-                                <NavDropdown.Item href="#action3">
+                                <NavDropdown.Item>
                                     <Image
                                         src={hinh7mau}
                                         rounded
@@ -98,38 +111,43 @@ function NavScrollExample() {
                                 id="navbarScrollingDropdown"
                             >
                                 {" "}
-                                <NavDropdown.Item href="#action3" style={{display: "flex"}}>
-                                    <Image
-                                        src={hinh7mau}
-                                        rounded
-                                        height={45}
-                                        style={{marginRight: ".3rem"}}
-                                    />
-                                    <div>
-                    <span
-                        style={{
-                            fontSize: "14px",
-                            fontWeight: "bold",
-                            lineHeight: "0.5",
-                            marginLeft: ".5rem",
-                            fontFamily: "sans-serif",
-                        }}
-                    >
-                      Untitled Board
-                    </span>
+                                {workspaces?.map((workspace) => (
+                                    <NavDropdown.Item
+                                        key={workspace.id}
+                                        style={{display: "flex"}}
+                                    >
+                                        <Image
+                                            src={hinh7mau}
+                                            rounded
+                                            height={45}
+                                            style={{marginRight: ".3rem"}}
+                                        />
+                                        <div>
+                      <span
+                          style={{
+                              fontSize: "14px",
+                              fontWeight: "bold",
+                              lineHeight: "0.5",
+                              marginLeft: ".5rem",
+                              fontFamily: "sans-serif",
+                          }}
+                      >
+                        {workspace.name}
+                      </span>
 
-                                        <p
-                                            style={{
-                                                fontSize: "12px",
-                                                fontWeight: "bold",
-                                                marginLeft: ".5rem",
-                                                fontFamily: "sans-serif",
-                                            }}
-                                        >
-                                            Trello không gian làm việc
-                                        </p>
-                                    </div>
-                                </NavDropdown.Item>
+                                            <p
+                                                style={{
+                                                    fontSize: "12px",
+                                                    fontWeight: "bold",
+                                                    marginLeft: ".5rem",
+                                                    fontFamily: "sans-serif",
+                                                }}
+                                            >
+                                                {workspace.description}
+                                            </p>
+                                        </div>
+                                    </NavDropdown.Item>
+                                ))}
                             </NavDropdown>
                         </Button>
                         <Button variant="light">
@@ -139,7 +157,7 @@ function NavScrollExample() {
                                 id="navbarScrollingDropdown"
                             >
                                 {" "}
-                                <NavDropdown.Item className={cx("space-item")} href="#action3">
+                                <NavDropdown.Item className={cx("space-item")}>
                                     <Image
                                         src={hinh7mau}
                                         rounded
@@ -179,7 +197,7 @@ function NavScrollExample() {
                     Các Mẫu hàng đầu
                   </span>
                                 </NavDropdown.Item>
-                                <NavDropdown.Item href="#action3">
+                                <NavDropdown.Item>
                                     <Image
                                         src={hinh7mau}
                                         rounded
@@ -197,7 +215,7 @@ function NavScrollExample() {
                     Trello không gian làm việc
                   </span>
                                 </NavDropdown.Item>
-                                <NavDropdown.Item href="#action3">
+                                <NavDropdown.Item>
                                     <Image
                                         src={hinh7mau}
                                         rounded
@@ -266,15 +284,20 @@ function NavScrollExample() {
                         <VscColorMode size={25}/>
                     </Form>
                 </Navbar.Collapse>
-                {
-                    logged
-                    && <div>Hello {lastname}</div>
-                    || <Link to={config.routes.account} className="m-3">
+                {(logged && (
+                    <div>
+                        Hello {lastname} /
+                        <span className={cx("logout-title")} onClick={handleLogout}>
+              Đăng xuất
+            </span>
+                    </div>
+                )) || (
+                    <Link to={config.routes.account} className="m-3">
                         <Button size="lg" type="submit">
                             Đăng Nhập
                         </Button>
                     </Link>
-                }
+                )}
             </Container>
         </Navbar>
     );

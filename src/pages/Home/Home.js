@@ -12,17 +12,6 @@ import {getAllMemberWorkspace} from "~/services/workspaces.sevices";
 const cx = classNames.bind(styles);
 
 function Home(props) {
-    const [wordBoards,setWordBoards] = useState([])
-    useEffect(() => {
-        async function fetchData() {
-            const response = await getAllMemberWorkspace(1);
-            const data = response?.data;
-            console.log(data)
-
-        }
-
-        fetchData();
-    }, []);
     return (
         <div className={cx('wrapper')}>
             <Container>

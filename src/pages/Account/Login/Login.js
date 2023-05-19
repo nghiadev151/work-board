@@ -6,6 +6,7 @@ import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 
 import AuthServices from "~/services/authServices";
+import {toast} from "react-toastify";
 
 const cx = classNames.bind(styles);
 
@@ -24,10 +25,19 @@ function Login() {
 
     const handleSubmit = async () => {
         try {
-            const response = await AuthServices.login(email, password)
+            await AuthServices.login(email, password)
             navigate("/")
         } catch (error) {
+            toast.warning('Đăng nhập thất bại! Vui lòng thử lại', {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+            });
             console.log(error)
+            setPassword("")
         }
     }
 
@@ -39,7 +49,7 @@ function Login() {
                 <a href="#" className={cx("ggIcons")}><FaGoogle/></a>
             </div>
             <span>or use your account</span>
-            <input value={email} onChange={handleUsername} autoFocus={true} type="text" placeholder="Username"/>
+            <input value={email} onChange={handleUsername} autoFocus={true} type="text" placeholder="Email"/>
             <input value={password} onChange={handlePassword} type="password" placeholder="Password"/>
             <a href="#" className={cx("hoverTextRed")}>Forgot your password?</a>
             <button onClick={handleSubmit} type={"button"} className={cx("hover")}>Sign In</button>
