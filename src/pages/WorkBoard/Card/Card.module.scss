@@ -61,13 +61,29 @@
     padding-left: 30px;
     padding-right: 30px;
 
-    .input{
+    .input {
       margin-top: 5px;
       width: 100%;
       background-color: #e4e6ea;
       border-radius: 5px;
 
-      input{
+      input {
+        border: none;
+        outline: none;
+        background-color: transparent;
+        text-indent: 15px;
+        line-height: 600%;
+        width: 95%;
+      }
+    }
+
+    .input-title {
+      margin-top: 5px;
+      width: 100%;
+      background-color: #e4e6ea;
+      border-radius: 5px;
+
+      input {
         border: none;
         outline: none;
         background-color: transparent;
@@ -77,12 +93,12 @@
       }
     }
 
-    .modal-save{
+    .modal-save {
       text-align: center;
       margin-top: 20px;
 
-      button{
-        &:hover{
+      button {
+        &:hover {
           cursor: pointer;
         }
       }

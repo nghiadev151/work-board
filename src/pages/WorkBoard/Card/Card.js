@@ -12,7 +12,12 @@ import {AiFillEdit, AiOutlineUserAdd} from 'react-icons/ai'
 
 import styles from "./Card.module.scss";
 import Form from "react-bootstrap/Form";
-import {addMemberToCard, searchUserByEmail, updateCardTitle} from "~/services/workspaces.sevices";
+import {
+    addMemberToCard,
+    searchUserByEmail,
+    searchUserInWorkSpace,
+    updateCardTitle
+} from "~/services/workspaces.sevices";
 import {toast} from "react-toastify";
 import UserItem from "~/pages/WorkBoard/Card/UserItem";
 import {Avatar} from "~/assets/avatar";
@@ -21,7 +26,7 @@ import {Avatar} from "~/assets/avatar";
 const cx = classNames.bind(styles);
 
 function Card(props) {
-    const {card, loading, columnId} = props
+    const {card, loading, columnId, workspaceId} = props
     const [tooltipIndex, setTooltipIndex] = useState(-1);
     const [show, setShow] = useState(false);
     const [open, setOpen] = useState(false)
@@ -83,7 +88,7 @@ function Card(props) {
         let timeout
         const fetchData = async () => {
             timeout = setTimeout(async () => {
-                const response = await searchUserByEmail(email)
+                const response = await searchUserInWorkSpace(workspaceId, email)
                 if (response?.data)
                     setUsers(response.data)
             }, 300)
@@ -177,11 +182,12 @@ function Card(props) {
                                 <div className={cx('modal')}>
                                     <div className={cx('modal-left')}>
                                         <div className={cx('description')}>
-                                            <div style={{fontWeight: 'bold'}}>Mô tả:{card.description}</div>
-                                            <div className={cx('input')}>
+                                            <div style={{fontWeight: 'bold'}}>Title:{card.description}</div>
+                                            <div className={cx('input-title')}>
                                                 <input value={name} onChange={handleChangeTitle}
                                                        placeholder={'Tên card'}/>
                                             </div>
+                                            <div style={{fontWeight: 'bold'}}>Mô tả:{card.description}</div>
                                             <div className={cx('input')}>
                                                 <input value={description} onChange={handleChangeDescription}
                                                        placeholder={'Mô tả'}/>

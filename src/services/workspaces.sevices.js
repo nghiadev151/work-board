@@ -50,6 +50,9 @@ export const deleteColumById = async (id) => {
 export const updateTitleColumn = async (id, body) => {
     return await instance.put(`/column/${id}`, body);
 }
+export const searchUserInWorkSpace = async (workspace, email) => {
+    return await instance.get(`/user/search/${workspace}/${email}`)
+}
 
 
 
