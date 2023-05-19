@@ -44,6 +44,9 @@ export const searchUserByEmail = async (email) => {
 export const updateCardTitle = async (id, body) => {
     return await instance.put(`/cards/${id}`, body);
 }
+export const deleteColumById = async (id) => {
+    return await instance.delete(`/column/${id}`);
+}
 
 
 

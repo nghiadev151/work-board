@@ -76,8 +76,8 @@ function WorkBoard(props) {
 
 
     const onCardDrop = async (columnId, dropResult) => {
-        console.log("card", card.cardId)
-        console.log("newColumnId", newColumnId)
+        // console.log("card", card.cardId)
+        // console.log("newColumnId", newColumnId)
         if (card !== null) {
             const response = await moveCardToColumn(card.cardId, newColumnId)
             if (response.status === 200) {

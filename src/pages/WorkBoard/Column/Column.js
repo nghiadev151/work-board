@@ -9,8 +9,10 @@ import styles from "./Column.module.scss";
 import Card from "~/pages/WorkBoard/Card";
 import {RiDeleteBack2Fill} from "react-icons/ri";
 import {AiOutlinePlus} from "react-icons/ai";
-import {createCard} from "~/services/workspaces.sevices";
+import {createCard, deleteColumById} from "~/services/workspaces.sevices";
 import {saveTitleAfterEdit, selectAllInlineTest} from "~/untils/ContentEditable";
+import {toast} from "react-toastify";
+import config from "~/config";
 
 const cx = classNames.bind(styles);
 
@@ -72,6 +74,24 @@ function Column(props) {
 
 
     }
+    const handleDeleteColumn = async () => {
+        console.log(data.id)
+        const response = await deleteColumById(data.id)
+        console.log(response)
+        if (response.status === 200) {
+            toast.success('Xóa cột thành công!', {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+            });
+            setIsLoading(true)
+
+        }
+
+    }
 
     return (
         <div className={cx('column')}>
@@ -97,7 +117,7 @@ function Column(props) {
                         align="end"
                         id="dropdown-menu-align-end"
                         title="">
-                        <DropdownItem>Xóa cột</DropdownItem>
+                        <DropdownItem onClick={handleDeleteColumn}>Xóa cột</DropdownItem>
                         <DropdownItem>Sửa title column</DropdownItem>
                     </DropdownButton>
                 </div>
