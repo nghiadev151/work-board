@@ -48,7 +48,7 @@ function NavScrollExample() {
     return (
         <Navbar className={cx("wrapper")} bg="light" expand="lg">
             <Container>
-                <Navbar.Brand href="/">
+                <Navbar.Brand>
                     <Link to={config.routes.home}>
                         <img
                             src={logo}
@@ -84,7 +84,7 @@ function NavScrollExample() {
                     Các Không gian làm việc của bạn
                   </span>
                                 </NavDropdown.Item>
-                                <NavDropdown.Item href="#action3">
+                                <NavDropdown.Item>
                                     <Image
                                         src={hinh7mau}
                                         rounded
@@ -113,7 +113,6 @@ function NavScrollExample() {
                                 {" "}
                                 {workspaces?.map((workspace) => (
                                     <NavDropdown.Item
-                                        href="#action3"
                                         key={workspace.id}
                                         style={{display: "flex"}}
                                     >
@@ -158,7 +157,7 @@ function NavScrollExample() {
                                 id="navbarScrollingDropdown"
                             >
                                 {" "}
-                                <NavDropdown.Item className={cx("space-item")} href="#action3">
+                                <NavDropdown.Item className={cx("space-item")}>
                                     <Image
                                         src={hinh7mau}
                                         rounded
@@ -198,7 +197,7 @@ function NavScrollExample() {
                     Các Mẫu hàng đầu
                   </span>
                                 </NavDropdown.Item>
-                                <NavDropdown.Item href="#action3">
+                                <NavDropdown.Item>
                                     <Image
                                         src={hinh7mau}
                                         rounded
@@ -216,7 +215,7 @@ function NavScrollExample() {
                     Trello không gian làm việc
                   </span>
                                 </NavDropdown.Item>
-                                <NavDropdown.Item href="#action3">
+                                <NavDropdown.Item>
                                     <Image
                                         src={hinh7mau}
                                         rounded
