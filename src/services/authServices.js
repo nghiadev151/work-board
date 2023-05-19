@@ -9,9 +9,7 @@ const login = async (email, password) => {
     return response
 }
 const logout = () => {
-    localStorage.removeItem("user");
     localStorage.clear();
-    window.location.replace("/account");
 };
 
 const register = async (email, password, firstName, lastName) => {
