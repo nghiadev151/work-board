@@ -11,6 +11,8 @@ function Register() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [confirm, setConfirm] = useState("")
+    const [firstname, setFirstname] = useState("")
+    const [lastname, setLastname] = useState("")
 
     const handleEmail = (e) => {
         setEmail(e.target.value)
@@ -20,6 +22,12 @@ function Register() {
     }
     const handleConfirm = (e) => {
         setConfirm(e.target.value)
+    }
+    const handleFirstName = (e) => {
+        setFirstname(e.target.value)
+    }
+    const handleLastName = (e) => {
+        setLastname(e.target.value)
     }
 
     const handleRegister = async () => {
@@ -48,7 +56,7 @@ function Register() {
             return
         }
         try {
-            await AuthServices.register(email, password)
+            await AuthServices.register(email, password, firstname, lastname)
             toast.success('Đăng ký thành công', {
                 position: "top-right",
                 autoClose: 2000,
@@ -81,9 +89,11 @@ function Register() {
                 <a href="#" className={cx("ggIcons")}><FaGoogle/></a>
             </div>
             <span>or use your email for registration</span>
-            <input onChange={handleEmail} value={email} type="email" placeholder="Username"/>
+            <input onChange={handleEmail} value={email} type="email" placeholder="Email"/>
             <input onChange={handlePassword} value={password} type="password" placeholder="Password"/>
             <input onChange={handleConfirm} value={confirm} type="password" placeholder="Confirm Password"/>
+            <input onChange={handleFirstName} value={firstname} type="text" placeholder="First Name"/>
+            <input onChange={handleLastName} value={lastname} type="text" placeholder="Last Name"/>
             <button type={"button"} onClick={handleRegister} className={cx("hover")}>Sign Up</button>
         </form>
     )
