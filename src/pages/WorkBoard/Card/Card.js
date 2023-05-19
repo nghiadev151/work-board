@@ -177,11 +177,12 @@ function Card(props) {
                                 <div className={cx('modal')}>
                                     <div className={cx('modal-left')}>
                                         <div className={cx('description')}>
-                                            <div style={{fontWeight: 'bold'}}>Mô tả:{card.description}</div>
-                                            <div className={cx('input')}>
+                                            <div style={{fontWeight: 'bold'}}>Title:{card.description}</div>
+                                            <div className={cx('input-title')}>
                                                 <input value={name} onChange={handleChangeTitle}
                                                        placeholder={'Tên card'}/>
                                             </div>
+                                            <div style={{fontWeight: 'bold'}}>Mô tả:{card.description}</div>
                                             <div className={cx('input')}>
                                                 <input value={description} onChange={handleChangeDescription}
                                                        placeholder={'Mô tả'}/>
