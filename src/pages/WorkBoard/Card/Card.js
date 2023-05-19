@@ -31,8 +31,8 @@ function Card(props) {
     const [cardId, setCardId] = useState(null)
     const [users, setUsers] = useState([])
     const [haveData, setHaveData] = useState(false)
-    const [name, setName] = useState(card.name)
-    const [description, setDescription] = useState(card.description)
+    const [name, setName] = useState(card.name || "")
+    const [description, setDescription] = useState(card.description || "")
 
     const handleChangeTitle = (e) => {
         setName(e.target.value)
@@ -58,8 +58,6 @@ function Card(props) {
                 name: name,
                 description: description,
             }
-            console.log(body)
-            console.log(card.id)
             const response = await updateCardTitle(card.id, body);
             if (response.status === 200) {
                 toast.success('Updated Thành công!', {

@@ -36,7 +36,6 @@ function NavScrollExample() {
     getAllWorkspacesByUserId(user?.id).then((res) => setWorkspaces(res.data));
   }, []);
 
-  console.log(workspaces);
 
   const handleLogout = () => {
     AuthServices.logout();
