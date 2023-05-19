@@ -14,8 +14,8 @@ const logout = () => {
     window.location.replace("/account");
 };
 
-const register = async (email, password) => {
-    return await instance.post("/auth/register", {email, password})
+const register = async (email, password, firstName, lastName) => {
+    return await instance.post("/auth/register", {email, password, firstName, lastName})
 }
 
 const AuthServices = {

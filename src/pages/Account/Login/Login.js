@@ -49,7 +49,7 @@ function Login() {
                 <a href="#" className={cx("ggIcons")}><FaGoogle/></a>
             </div>
             <span>or use your account</span>
-            <input value={email} onChange={handleUsername} autoFocus={true} type="text" placeholder="Username"/>
+            <input value={email} onChange={handleUsername} autoFocus={true} type="text" placeholder="Email"/>
             <input value={password} onChange={handlePassword} type="password" placeholder="Password"/>
             <a href="#" className={cx("hoverTextRed")}>Forgot your password?</a>
             <button onClick={handleSubmit} type={"button"} className={cx("hover")}>Sign In</button>
