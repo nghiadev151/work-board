@@ -47,6 +47,9 @@ export const updateCardTitle = async (id, body) => {
 export const deleteColumById = async (id) => {
     return await instance.delete(`/column/${id}`);
 }
+export const updateTitleColumn = async (id, body) => {
+    return await instance.put(`/column/${id}`, body);
+}
 
 
 

@@ -9,7 +9,7 @@ import styles from "./Column.module.scss";
 import Card from "~/pages/WorkBoard/Card";
 import {RiDeleteBack2Fill} from "react-icons/ri";
 import {AiOutlinePlus} from "react-icons/ai";
-import {createCard, deleteColumById} from "~/services/workspaces.sevices";
+import {createCard, deleteColumById, updateTitleColumn} from "~/services/workspaces.sevices";
 import {saveTitleAfterEdit, selectAllInlineTest} from "~/untils/ContentEditable";
 import {toast} from "react-toastify";
 import config from "~/config";
@@ -17,7 +17,7 @@ import config from "~/config";
 const cx = classNames.bind(styles);
 
 function Column(props) {
-    const {data, getCardPayload, onCardDrop, setNewColumnId, setCard, setIsLoading} = props
+    const {data, getCardPayload, onCardDrop, setNewColumnId, setCard, setIsLoading, workspaceId} = props
     const [isOpen, setIsOpen] = useState(false)
     const [cardTitle, setCardTitle] = useState('')
     const [error, setError] = useState('')
@@ -35,13 +35,34 @@ function Column(props) {
         setIsOpen(true)
     }
     // Update column
-    const handleColumTitleBlur = () => {
+    const handleColumTitleBlur = async (e) => {
+        e.preventDefault()
+        if (!columnTitle) {
+            toast.warning('Tiêu đề không được để trống!', {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+            });
+            e.target.focus()
+            return;
+        }
         if (columnTitle !== data.name) {
-            const newColumn = {
-                ...data,
-                title: columnTitle
+            const body = {
+                workspaceId: workspaceId,
+                columnName: columnTitle
             }
-            //Call api updateColumn
+            const response = await updateTitleColumn(data.id, body)
+            if (response.status === 200) {
+                setIsLoading(true)
+                setIsOpen(false)
+                setCardTitle('')
+            } else {
+                setIsLoading(false)
+            }
+
 
         }
 

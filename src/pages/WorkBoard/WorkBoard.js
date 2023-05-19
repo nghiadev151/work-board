@@ -114,6 +114,7 @@ function WorkBoard(props) {
                                     setCurrentColumnId={setCurrentColumnId}
                                     setIsLoading={setIsLoading}
                                     setCard={setCard}
+                                    workspaceId={id}
                                     data={column}
                                     onCardDrop={onCardDrop}
                                     getCardPayload={getCardPayload}/>
